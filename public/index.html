@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="my">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fff8f2">
+  <meta name="description" content="ချစ်စရာ မိသားစုနေ့စဉ်အသုံးစရိတ်စာရင်း">
+  <title>တို့မိသားစု · အိမ်သုံးစာရင်း</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Noto+Sans+Myanmar:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand-mark" aria-hidden="true">🏡</div>
+      <div class="brand-copy"><p class="eyebrow">OUR LITTLE HOME</p><h1>တို့မိသားစု</h1><p class="subtitle">အိမ်ရဲ့ နေ့စဉ်မှတ်တမ်းလေး 💗</p></div>
+      <button id="logoutBtn" class="icon-btn hidden" type="button" title="ထွက်ရန်" aria-label="ထွက်ရန်">↗</button>
+    </header>
+
+    <section id="setupNotice" class="notice hidden">
+      <strong>🌷 Database ချိတ်ဆက်ရန် ကျန်နေသေးတယ်</strong>
+      <p>Render ရဲ့ Environment Variables ထဲမှာ SUPABASE_URL နဲ့ SUPABASE_ANON_KEY ထည့်ပြီး Supabase SQL Editor မှာ README ထဲက schema ကို run ပေးပါ။</p>
+    </section>
+
+    <section id="authCard" class="card auth-card hidden">
+      <div class="section-heading"><div><p class="eyebrow">JUST FOR OUR FAMILY</p><h2>မိသားစုအကောင့် 💞</h2></div><span class="sticker">🌼</span></div>
+      <p class="muted">ကိုယ်ပိုင်စာရင်းတွေကို လုံခြုံစွာ သိမ်းထားဖို့ အကောင့်ဝင်ပါ။</p>
+      <form id="authForm" class="stack">
+        <label>အီးမေးလ်<input id="email" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+        <label>စကားဝှက်<input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="အနည်းဆုံး ၆ လုံး" required></label>
+        <button class="btn btn-primary full" id="authSubmit" type="submit">အကောင့်ဝင်မယ် <span>♡</span></button>
+      </form>
+      <button id="toggleAuth" class="text-btn" type="button">အကောင့်အသစ် ဖွင့်မယ်</button>
+      <p id="authMessage" class="form-message" role="status"></p>
+    </section>
+
+    <div id="appContent" class="hidden">
+      <section class="welcome-card">
+        <div><p class="eyebrow">A LITTLE CARE, EVERY DAY</p><h2>ဒီနေ့ ဘာတွေသုံးခဲ့လဲ။</h2><p>မှတ်ထားလိုက်ရအောင်နော် ✨</p></div>
+        <div class="welcome-art" aria-hidden="true">🧸<span>🌷</span></div>
+      </section>
+
+      <section class="card entry-card">
+        <div class="section-heading"><div><p class="eyebrow">NEW EXPENSE</p><h2>စာရင်းအသစ်ထည့်မယ်</h2></div><span class="sticker">✏️</span></div>
+        <form id="expenseForm" class="stack">
+          <label>ရက်စွဲ
+            <input id="expenseDate" type="date" required>
+          </label>
+          <label>အသုံးစရိတ် (ကျပ်)
+            <div class="amount-wrap"><span>₭</span><input id="amount" type="number" inputmode="decimal" min="1" step="1" placeholder="ဥပမာ - 5,000" required></div>
+          </label>
+          <label>မှတ်ချက် <span class="optional">မဖြည့်လည်းရတယ်</span>
+            <textarea id="note" rows="2" maxlength="300" placeholder="ဥပမာ - ဈေးဖိုး၊ ဟင်းသီးဟင်းရွက်ဝယ်"></textarea>
+          </label>
+          <p class="choose-label">ဘယ်စာရင်းထဲ ထည့်မလဲ။</p>
+          <div class="category-grid">
+            <button class="category-btn koko" data-category="ကိုကိုသန့်" type="submit"><span class="category-emoji">🧑🏻</span><span>ကိုကိုသန့်</span><small>ကိုကို့စာရင်း</small></button>
+            <button class="category-btn hti" data-category="ထိပ်ထိပ်" type="submit"><span class="category-emoji">👩🏻</span><span>ထိပ်ထိပ်</span><small>ထိပ်ထိပ်စာရင်း</small></button>
+          </div>
+          <button class="category-btn home" data-category="အိမ်စရိတ်" type="submit"><span class="category-emoji">🏠</span><span>အိမ်စရိတ်</span><small>အိမ်အတွက် သုံးငွေ</small><b>＋</b></button>
+          <p id="expenseMessage" class="form-message" role="status"></p>
+        </form>
+      </section>
+
+      <section class="section-block">
+        <div class="section-heading section-title"><div><p class="eyebrow">TODAY AT A GLANCE</p><h2>ဒီနေ့ရဲ့ စာရင်းလေး 🌸</h2></div><input id="summaryDate" type="date" aria-label="နေ့စဉ်စာရင်း ရက်စွဲ"></div>
+        <div class="total-card"><div><span>ဒီနေ့ စုစုပေါင်း</span><strong id="todayTotal">0 ကျပ်</strong></div><span class="total-icon">💝</span></div>
+        <div class="summary-grid">
+          <article class="summary-card pink"><span class="summary-emoji">🧑🏻</span><span>ကိုကိုသန့်</span><strong id="todayKoko">0</strong><small>ကျပ်</small></article>
+          <article class="summary-card blue"><span class="summary-emoji">👩🏻</span><span>ထိပ်ထိပ်</span><strong id="todayHti">0</strong><small>ကျပ်</small></article>
+          <article class="summary-card green"><span class="summary-emoji">🏠</span><span>အိမ်စရိတ်</span><strong id="todayHome">0</strong><small>ကျပ်</small></article>
+        </div>
+      </section>
+
+      <section class="card records-card">
+        <div class="section-heading"><div><p class="eyebrow">LITTLE MEMORIES</p><h2 id="recordsTitle">ဒီနေ့ မှတ်တမ်းများ</h2></div><span class="sticker">📒</span></div>
+        <div id="records" class="records-list"><div class="empty-state"><span>🧺</span><p>ဒီနေ့ စာရင်းမရှိသေးဘူးနော်။</p></div></div>
+      </section>
+
+      <section class="card monthly-card">
+        <div class="section-heading"><div><p class="eyebrow">MONTHLY LOVE</p><h2>လချုပ်စာရင်း 💐</h2></div><span class="sticker">🗓️</span></div>
+        <label>လရွေးရန်<input id="monthPicker" type="month"></label>
+        <div class="month-total"><span>ဒီလ စုစုပေါင်း</span><strong id="monthTotal">0 ကျပ်</strong></div>
+        <div class="month-row"><span>🧑🏻 ကိုကိုသန့်</span><strong id="monthKoko">0 ကျပ်</strong></div>
+        <div class="month-row"><span>👩🏻 ထိပ်ထိပ်</span><strong id="monthHti">0 ကျပ်</strong></div>
+        <div class="month-row"><span>🏠 အိမ်စရိတ်</span><strong id="monthHome">0 ကျပ်</strong></div>
+        <div class="month-row grand"><span>စုစုပေါင်းအသုံးစရိတ်</span><strong id="monthGrand">0 ကျပ်</strong></div>
+      </section>
+      <footer>သေးသေးလေးတွေကနေ မိသားစုဘဝလေး ပိုလှလာတယ် <span>♡</span></footer>
+    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </main>
+</body>
+</html>
